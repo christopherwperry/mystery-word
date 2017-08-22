@@ -27,11 +27,22 @@ app.use(session({
 app.get('/', function(req, res){
   req.session.word = words[Math.floor(Math.random() * words.length)];
   wordLetters = Array.from(req.session.word);
+  guesses = 8;
+  letters = [];
   console.log(req.session.word);
   console.log(req.session);
   console.log(wordLetters);
   res.render('index', {guesses: guesses, letters: letters});
 });
+
+app.post('/', function(req, res){
+  let letterGuess = req.body.letter;
+  letters.push(letterGuess);
+  guesses = guesses - 1;
+  console.log(letterGuess);
+  console.log(letters)
+  res.render('index', {guesses: guesses, letters: letters});
+})
 
 app.listen(3000, function(){
   console.log("Server running on port 3000");
