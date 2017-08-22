@@ -14,13 +14,17 @@
           <div class="word">
             {{#wordLetters}}
             <div class="letters hidden">
-
+              {{.}}
             </div>
             {{/wordLetters}}
           </div>
           <input type="text" name="letter" value="">
           <button type="submit" name="button">Make a guess</button>
-          <p><strong>Letters guessed:</strong> {{letters}} </p>
+          <p><strong>Letters guessed: </strong>
+            {{#letters}}
+            {{.}},
+            {{/letters}}
+          </p>
       </fieldset>
     </form>
   </body>

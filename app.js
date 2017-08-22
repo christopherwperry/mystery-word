@@ -36,6 +36,7 @@ app.get('/', function(req, res){
 });
 
 app.post('/', function(req, res){
+  console.log(wordLetters);
   let letterGuess = req.body.letter;
   if (letterGuess === ""){
     res.render('index', {guesses: guesses, letters: letters, wordLetters});
