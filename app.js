@@ -12,9 +12,8 @@ app.engine('mustache', mustache());
 app.set('views', ['./views']);
 app.set('view engine', 'mustache');
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(expressValidator());
-
 app.use(session({
   secret: 'mystery',
   resave: false,
@@ -22,8 +21,9 @@ app.use(session({
 }));
 
 app.get('/', function(req, res){
-  let todaysWord = words[Math.floor(Math.random() * words.length)];
-  console.log(todaysWord);
+  req.session.word = words[Math.floor(Math.random() * words.length)];
+  console.log(req.session.word);
+  console.log(req.session);
   res.render('index');
 });
 
