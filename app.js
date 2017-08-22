@@ -7,6 +7,10 @@ const app = express();
 const fs = require('fs');
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 
+let guesses = 8;
+let letters = [];
+let wordLetters;
+
 app.use(express.static(__dirname + '/public'));
 app.engine('mustache', mustache());
 app.set('views', ['./views']);
@@ -22,9 +26,11 @@ app.use(session({
 
 app.get('/', function(req, res){
   req.session.word = words[Math.floor(Math.random() * words.length)];
+  wordLetters = Array.from(req.session.word);
   console.log(req.session.word);
   console.log(req.session);
-  res.render('index');
+  console.log(wordLetters);
+  res.render('index', {guesses: guesses, letters: letters});
 });
 
 app.listen(3000, function(){
