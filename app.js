@@ -32,17 +32,28 @@ app.get('/', function(req, res){
   console.log(req.session.word);
   console.log(req.session);
   console.log(wordLetters);
-  res.render('index', {guesses: guesses, letters: letters});
+  res.render('index', {guesses: guesses, letters: letters, wordLetters});
 });
 
 app.post('/', function(req, res){
   let letterGuess = req.body.letter;
-  letters.push(letterGuess);
-  guesses = guesses - 1;
-  console.log(letterGuess);
-  console.log(letters)
-  res.render('index', {guesses: guesses, letters: letters});
-})
+  if (letterGuess === ""){
+    res.render('index', {guesses: guesses, letters: letters, wordLetters});
+  } else {
+    let letterCheck = letters.indexOf(letterGuess);
+    if (letterCheck === -1){
+      console.log(letterCheck);
+      letters.push(letterGuess);
+      guesses = guesses - 1;
+      console.log(letterGuess);
+      console.log(letters)
+      res.render('index', {guesses: guesses, letters: letters, wordLetters});
+    } else {
+      //TODO figure out alert/error message for a duplicate letter being guessed.
+      res.render('index', {guesses: guesses, letters: letters, wordLetters})
+    }
+  }
+});
 
 app.listen(3000, function(){
   console.log("Server running on port 3000");

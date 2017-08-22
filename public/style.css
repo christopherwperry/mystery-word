@@ -1,3 +1,21 @@
 body {
   text-align: center;
+  margin: 0;
+}
+
+.word {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.letters {
+  width: 5vw;
+  margin: 1%;
+  padding: 1%;
+  border-bottom: solid black 2px;
+}
+
+.hidden {
+
 }
