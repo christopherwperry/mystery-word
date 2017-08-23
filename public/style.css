@@ -1,12 +1,12 @@
 body {
   text-align: center;
-  margin: 0;
 }
 
 .word {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  margin-bottom: 3vh;
 }
 
 .letters {
@@ -15,4 +15,13 @@ body {
   padding: 1%;
   border-bottom: solid black 2px;
   font-size: 24px;
+}
+
+.guessed {
+  margin-top: 3vh;
+}
+
+input {
+  width: 5vw;
+  text-align: center;
 }
