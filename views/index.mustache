@@ -12,19 +12,15 @@
           <h1>Mystery Word</h1>
           <p>You have <strong>{{guesses}}</strong> guesses left.</p>
           <div class="word">
-            {{#wordLetters}}
-            <div class="letters hidden">
+            {{#wordArray}}
+            <div class="letters">
               {{.}}
             </div>
-            {{/wordLetters}}
+            {{/wordArray}}
           </div>
           <input type="text" name="letter" value="">
           <button type="submit" name="button">Make a guess</button>
-          <p><strong>Letters guessed: </strong>
-            {{#letters}}
-            {{.}},
-            {{/letters}}
-          </p>
+          <p><strong>Letters guessed: </strong>{{#letters}}{{.}}{{/letters}}</p>
       </fieldset>
     </form>
   </body>

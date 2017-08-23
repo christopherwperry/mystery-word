@@ -9,7 +9,11 @@ const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().sp
 
 let guesses = 8;
 let letters = [];
+let match = false;
 let wordLetters;
+let letterGuess;
+let wordArray;
+let letter;
 
 app.use(express.static(__dirname + '/public'));
 app.engine('mustache', mustache());
@@ -29,32 +33,49 @@ app.get('/', function(req, res){
   wordLetters = Array.from(req.session.word);
   guesses = 8;
   letters = [];
+  wordArray = [];
+  for (let i = 0; i < wordLetters.length; i++){
+    wordArray.push("");
+  }
   console.log(req.session.word);
   console.log(req.session);
   console.log(wordLetters);
-  res.render('index', {guesses: guesses, letters: letters, wordLetters});
+  console.log(wordArray);
+  res.render('index', {guesses: guesses, letters: letters, wordArray});
 });
 
 app.post('/', function(req, res){
-  console.log(wordLetters);
-  let letterGuess = req.body.letter;
-  if (letterGuess === ""){
-    res.render('index', {guesses: guesses, letters: letters, wordLetters});
-  } else {
-    let letterCheck = letters.indexOf(letterGuess);
-    if (letterCheck === -1){
-      console.log(letterCheck);
-      letters.push(letterGuess);
-      guesses = guesses - 1;
-      console.log(letterGuess);
-      console.log(letters)
-      res.render('index', {guesses: guesses, letters: letters, wordLetters});
+  letterGuess = req.body.letter;
+  console.log(letterGuess);
+    if (letterGuess === ""){
+      res.render('index', {guesses: guesses, letters: letters, wordArray});
     } else {
-      //TODO figure out alert/error message for a duplicate letter being guessed.
-      res.render('index', {guesses: guesses, letters: letters, wordLetters})
+      let letterCheck = letters.indexOf(letterGuess);
+      if (letterCheck === -1){
+        console.log(match);
+        checkLetter();
+        console.log(match);
+        letters.push(letterGuess);
+        guesses = guesses - 1;
+        if (guesses === 0){
+          res.render('index');
+        } else {
+          res.render('index', {guesses: guesses, letters: letters, wordArray});
+        }
+      }
     }
-  }
-});
+  });
+
+function checkLetter(){
+  for (let i = 0; i < wordLetters.length; i++){
+    if (letterGuess === wordLetters[i]){
+      match = true;
+      letter = wordLetters[i];
+      wordArray[i] = letter;
+    }
+  };
+  return wordArray;
+}
 
 app.listen(3000, function(){
   console.log("Server running on port 3000");
