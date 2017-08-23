@@ -9,7 +9,7 @@ const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().sp
 
 let guesses = 8;
 let letters = [];
-let match = false;
+let match;
 let wordLetters;
 let letterGuess;
 let wordArray;
@@ -37,26 +37,19 @@ app.get('/', function(req, res){
   for (let i = 0; i < wordLetters.length; i++){
     wordArray.push("");
   }
-  console.log(req.session.word);
-  console.log(req.session);
-  console.log(wordLetters);
-  console.log(wordArray);
   res.render('index', {guesses: guesses, letters: letters, wordArray});
 });
 
 app.post('/', function(req, res){
   letterGuess = req.body.letter;
-  console.log(letterGuess);
     if (letterGuess === ""){
       res.render('index', {guesses: guesses, letters: letters, wordArray});
     } else {
       let letterCheck = letters.indexOf(letterGuess);
       if (letterCheck === -1){
-        console.log(match);
+        match = false;
         checkLetter();
-        console.log(match);
         letters.push(letterGuess);
-        guesses = guesses - 1;
         if (guesses === 0){
           res.render('index');
         } else {
@@ -74,8 +67,12 @@ function checkLetter(){
       wordArray[i] = letter;
     }
   };
-  return wordArray;
-}
+  if (match === false){
+    guesses = guesses - 1;
+  };
+  return wordArray
+  return guesses
+};
 
 app.listen(3000, function(){
   console.log("Server running on port 3000");
