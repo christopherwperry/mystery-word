@@ -32,7 +32,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(expressValidator());
 app.use(session({
-  secret: 'mystery',
+  secret: 'mystery men',
   resave: false,
   saveUninitialized: true
 }));
@@ -42,14 +42,9 @@ app.get('/', function(req, res){
 });
 
 app.get('/newgame', function(req, res){
-    // if(difficulty === easy){
-    // req.session.word = easyWords[Math.floor(Math.random() * easyWords.length)];
-    // } else if (difficulty === normal) {
-    // req.session.word = normalWords[Math.floor(Math.random() * normalWords.length)];
-    // } else {
-    // req.session.word = hardWords[Math.floor(Math.random() * hardWords.length)];
-    // }
+  if(req.session.difficulty){
     req.session.word = words[Math.floor(Math.random() * words.length)];
+    req.session.difficulty = null;
     req.session.guesses = 8;
     guesses = req.session.guesses
     wordLetters = Array.from(req.session.word);
@@ -61,6 +56,9 @@ app.get('/newgame', function(req, res){
       wordArray.push("");
     }
     res.render('game', {guesses, letters, wordArray, gameStart});
+  } else {
+    res.redirect('/')
+  }
 });
 
 app.get('/winners', function(req, res){
@@ -70,6 +68,7 @@ app.get('/winners', function(req, res){
 app.post('/', function(req, res){
   difficulty = req.body.difficulty;
   req.session.difficulty = difficulty;
+  console.log(difficulty);
   res.redirect('/newgame')
 });
 
@@ -110,14 +109,11 @@ app.post('/newgame', function(req, res){
   });
 
 app.post('/new', function(req, res){
-  res.redirect('/')
+  res.redirect('/');
 });
 
-app.post('/winners'), function(req, res){
-  console.log(req.body.name);
-  // newWinner = req.body.name.toUpperCase();
-  // winners.push(newWinner);
-  res.render('winners', winners);
+app.post('/poop'), function(req, res){
+  res.redirect('/');
 }
 
 function checkLetter(){
@@ -146,3 +142,26 @@ function missedLetters(){
 app.listen(3000, function(){
   console.log("Server running on port 3000");
 });
+
+// if(req.session.difficulty === easy){
+// req.session.word = easyWords[Math.floor(Math.random() * easyWords.length)];
+// console.log("easy");
+// } else if (req.session.difficulty === normal) {
+// req.session.word = normalWords[Math.floor(Math.random() * normalWords.length)];
+// console.log("normal");
+// } else {
+// req.session.word = hardWords[Math.floor(Math.random() * hardWords.length)];
+// console.log("hard");
+// }
+
+// if (difficulty === easy){
+//   data = easyWords;
+//   console.log("easy");
+//   console.log(data);
+// } else if (difficulty === normal){
+//   data = normalWords;
+//   console.log("normal");
+// } else {
+//   data = hardWords;
+//   console.log("hard");
+// }
