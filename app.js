@@ -6,6 +6,7 @@ const expressValidator = require('express-validator');
 const app = express();
 const fs = require('fs');
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
+let winners = ["Chris", "Chris", "Chris"];
 
 app.use(express.static(__dirname + '/public'));
 app.engine('mustache', mustache());
@@ -35,13 +36,23 @@ app.get('/', function(req, res){
   res.render('index', {guesses, letters, wordArray, gameStart});
 });
 
+app.get('/winners', function(req, res){
+  res.render('winners', {winners});
+})
+
 app.post('/', function(req, res){
     letterGuess = req.body.letter.toLowerCase();
     if (!letterGuess){
       authError = "Please enter a letter."
       res.render('index', {guesses, letters, wordArray, authError});
+    } else if (req.checkBody('letter', 'Invalid letter').isAlpha().validationErrors[0]) {
+      authError = "Invalid Entry. Please enter a letter."
+      res.render('index', {guesses, letters, wordArray, authError});
     } else {
-      if (letters.indexOf(letterGuess) === -1){
+      if (letters.includes(letterGuess)){
+        authError = "Letter already guessed. Please try another!"
+        res.render('index', {guesses, letters, wordArray, authError});
+      } else {
         match = false;
         checkLetter();
         console.log(wordLetters);
@@ -59,9 +70,6 @@ app.post('/', function(req, res){
         } else {
           res.render('index', {guesses, letters, wordArray});
         }
-      } else {
-        authError = "Letter already guessed. Please try another!"
-        res.render('index', {guesses, letters, wordArray, authError});
       }
     }
   });
@@ -69,6 +77,12 @@ app.post('/', function(req, res){
 app.post('/new', function(req, res){
   res.redirect('/')
 });
+
+app.post('/winners'), function(req,res){
+  newWinner = req.body.name.toUpperCase();
+  winners.push(newWinner);
+//  res.render('winners', {winners});
+}
 
 function checkLetter(){
   for (let i = 0; i < wordLetters.length; i++){
