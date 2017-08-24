@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mystery Word</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+  </head>
+  <body>
+    <form class="mystery-word" action="/newgame" method="post">
+          <h1>Mystery Word</h1>
+          <p>You have <strong>{{guesses}}</strong> guesses left.</p>
+          {{#gameStart}}
+          <div class="alert-primary">
+            <p>Guess a letter to begin the game.</p>
+          </div>
+          {{/gameStart}}
+          {{#newMatch}}
+          <div class="alert-success">
+            <p>That's a match!</p>
+          </div>
+          {{/newMatch}}
+          {{#winner}}
+          <div class="alert-success">
+            <p>{{winner}}</p>
+          </div>
+          {{/winner}}
+          {{#authError}}
+          <div class="alert-danger">
+            {{authError}}
+          </div>
+          {{/authError}}
+          <div class="word">
+            {{#wordArray}}
+            <div class="letters">
+              {{.}}
+            </div>
+            {{/wordArray}}
+          </div>
+          {{^newGame}}
+          <input class="guess" type="text" name="letter" maxlength="1" autofocus>
+          <button type="submit" name="button">Make a guess</button>
+          {{/newGame}}
+          <p class="guessed"><strong>Letters guessed: </strong>
+            {{^letters}}none{{/letters}}
+            {{#letters}}{{.}} {{/letters}}
+          </p>
+    </form>
+    {{#newGame}}
+    <form class="new-game" action="/new" method="post">
+      <button type="submit" name="game">New Game</button>
+    </form>
+    {{/newGame}}
+    {{#winner}}
+    <form class="winner-form" action="/winners" method="post">
+      <h3>Winner's Info</h3>
+      <label class="info" for="name">Enter Name: </label>
+      <input class="info" type="text" name="name"><br>
+      <input class="info" type="file" name="pic" accept="image/*"><br>
+      <button class="info" type="submit" name="button">Submit</button>
+    </form>
+    {{/winner}}
+  </body>
+</html>

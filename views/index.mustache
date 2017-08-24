@@ -7,52 +7,18 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
   </head>
   <body>
-    <form class="mystery-word" action="/" method="post">
-      <fieldset>
-          <h1>Mystery Word</h1>
-          <p>You have <strong>{{guesses}}</strong> guesses left.</p>
-          {{#gameStart}}
-          <div class="alert-primary">
-            <p>Guess a letter to begin the game.</p>
-          </div>
-          {{/gameStart}}
-          {{#winner}}
-          <div class="alert-success">
-            <p>{{winner}}</p>
-          </div>
-          {{/winner}}
-          {{#authError}}
-          <div class="alert-danger">
-            {{authError}}
-          </div>
-          {{/authError}}
-          <div class="word">
-            {{#wordArray}}
-            <div class="letters">
-              {{.}}
-            </div>
-            {{/wordArray}}
-          </div>
-          {{^newGame}}
-          <input type="text" name="letter" maxlength="1">
-          <button type="submit" name="button">Make a guess</button>
-          {{/newGame}}
-          <p class="guessed"><strong>Letters guessed: </strong>
-            {{^letters}}none{{/letters}}
-            {{#letters}}{{.}} {{/letters}}
-          </p>
-      </fieldset>
+    <form class="" action="/" method="post">
+      <h1>Mystery Word</h1>
+      <h4>Choose Difficulty:</h4>
+      <select name="difficulty">
+        <option value="easy">Easy</option>
+        <option value="normal">Normal</option>
+        <option value="hard">Hard</option>
+      </select>
+      <button type="submit" name="button">Start</button>
+
+
     </form>
-    {{#newGame}}
-    <form class="" action="/new" method="post">
-      <button type="submit" name="game">New Game</button>
-    </form>
-    {{/newGame}}
-    {{#winner}}
-    <form class="" action="/winners" method="post">
-      <label for="name">Enter Name: </label>
-      <input type="text" name="name" value="">
-    </form>
-    {{/winner}}
+
   </body>
 </html>
