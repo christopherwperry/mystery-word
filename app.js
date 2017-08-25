@@ -22,7 +22,8 @@ const hardWords = words.filter(function(element) {
   };
 });
 
-let winners = [{name: "Chris", img: "" }];
+let winner = ["Chris", "Chris"]
+//let winners = [{name: "Chris", img: "" }];
 
 app.use(express.static(__dirname + '/public'));
 app.engine('mustache', mustache());
@@ -73,7 +74,7 @@ app.get('/newgame', function(req, res){
 });
 
 app.get('/winners', function(req, res){
-  res.render('winners', {winners: winners});
+  res.render('winners', {winners});
 });
 
 app.post('/easy', function(req, res){
