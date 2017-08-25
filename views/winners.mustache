@@ -8,11 +8,13 @@
   </head>
   <body>
     <h1>Game Winners</h1>
-    <ul>
       {{#winners}}
-      <li>{{.}}</li>
+      <div class="winners-list">
+        {{.}}
+      </div>
       {{/winners}}
-    </ul>
-
+      <form class="new-game" action="/new" method="post">
+        <button type="submit" name="game">New Game</button>
+      </form>
   </body>
 </html>

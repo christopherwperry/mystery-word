@@ -46,20 +46,18 @@
             {{#letters}}{{.}} {{/letters}}
           </p>
     </form>
-
     {{#newGame}}
     <form class="new-game" action="/new" method="post">
       <button type="submit" name="game">New Game</button>
     </form>
     {{/newGame}}
-
     {{#winner}}
-    <form class="winner-form" action="/poop" method="post">
+    <form class="winner-form" action="/win" method="post">
       <h3>Winner's Info</h3>
-      <label class="info" for="name">Enter Name: </label>
+      <!-- <label class="info" for="name">Enter Name: </label> -->
       <input class="info" type="text" name="name"><br>
-      <input class="info pic" type="file" name="pic" accept="image/*"><br>
-      <button class="info" type="submit" name="button">Submit</button>
+      <!-- <input class="info pic" type="file" name="pic" accept="image/*"><br>
+      <button class="info" type="submit" name="button">Submit</button> -->
     </form>
     {{/winner}}
 

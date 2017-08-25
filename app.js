@@ -17,12 +17,12 @@ const normalWords = words.filter(function(element) {
   }
 });
 const hardWords = words.filter(function(element) {
-  if (element.length > 8){
+  if (element.length >= 8){
     return (element);
   };
 });
 
-let winners = ["Chris", "Chris", "Chris"];
+let winners = [{name: "Chris", img: "" }];
 
 app.use(express.static(__dirname + '/public'));
 app.engine('mustache', mustache());
@@ -43,7 +43,18 @@ app.get('/', function(req, res){
 
 app.get('/newgame', function(req, res){
   if(req.session.difficulty){
-    req.session.word = words[Math.floor(Math.random() * words.length)];
+    if(req.session.easy){
+    req.session.word = easyWords[Math.floor(Math.random() * easyWords.length)];
+    }
+    if(req.session.normal){
+    req.session.word = normalWords[Math.floor(Math.random() * normalWords.length)];
+    }
+    if (req.session.hard){
+    req.session.word = hardWords[Math.floor(Math.random() * hardWords.length)];
+    }
+    req.session.easy = false;
+    req.session.normal = false;
+    req.session.hard = false;
     req.session.difficulty = null;
     req.session.guesses = 8;
     guesses = req.session.guesses
@@ -62,15 +73,31 @@ app.get('/newgame', function(req, res){
 });
 
 app.get('/winners', function(req, res){
-  res.render('winners', {winners});
+  res.render('winners', {winners: winners});
 });
 
-app.post('/', function(req, res){
-  difficulty = req.body.difficulty;
-  req.session.difficulty = difficulty;
-  console.log(difficulty);
+app.post('/easy', function(req, res){
+  req.session.difficulty = true;
+  req.session.easy = true
   res.redirect('/newgame')
 });
+
+app.post('/normal', function(req, res){
+  req.session.difficulty = true;
+  req.session.normal = true;
+  res.redirect('/newgame')
+});
+
+app.post('/hard', function(req, res){
+  req.session.difficulty = true;
+  req.session.hard = true;
+  res.redirect('/newgame')
+});
+
+app.post('/win', function(req, res){
+  winners.push(req.body.name);
+  res.redirect('/winners');
+})
 
 app.post('/newgame', function(req, res){
     letterGuess = req.body.letter.toLowerCase();
@@ -103,16 +130,13 @@ app.post('/newgame', function(req, res){
           res.render('game', {guesses, letters, wordArray, authError, newGame});
         } else {
           res.render('game', {guesses, letters, wordArray, authError, newMatch});
-        }
-      }
-    }
-  });
+        }}}});
 
 app.post('/new', function(req, res){
   res.redirect('/');
 });
 
-app.post('/poop'), function(req, res){
+app.post('/difficulty'), function(req, res){
   res.redirect('/');
 }
 
@@ -122,46 +146,19 @@ function checkLetter(){
       match = true;
       points+=1;
       wordArray[i] = wordLetters[i];
-      newMatch = true;
+      newMatch = true;}
     }
-  };
   if (match === false){
     guesses-=1;
     authError = "No match here! Guess again."
-  };
-};
+}};
 
 function missedLetters(){
   for (let i = 0; i < wordLetters.length; i++){
     if (wordArray[i] === ""){
       wordArray[i] = wordLetters[i];
-    }
-  }
-}
+}}};
 
 app.listen(3000, function(){
   console.log("Server running on port 3000");
 });
-
-// if(req.session.difficulty === easy){
-// req.session.word = easyWords[Math.floor(Math.random() * easyWords.length)];
-// console.log("easy");
-// } else if (req.session.difficulty === normal) {
-// req.session.word = normalWords[Math.floor(Math.random() * normalWords.length)];
-// console.log("normal");
-// } else {
-// req.session.word = hardWords[Math.floor(Math.random() * hardWords.length)];
-// console.log("hard");
-// }
-
-// if (difficulty === easy){
-//   data = easyWords;
-//   console.log("easy");
-//   console.log(data);
-// } else if (difficulty === normal){
-//   data = normalWords;
-//   console.log("normal");
-// } else {
-//   data = hardWords;
-//   console.log("hard");
-// }

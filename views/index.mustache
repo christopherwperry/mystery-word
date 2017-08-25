@@ -7,19 +7,17 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
   </head>
   <body>
-    <form class="" action="/" method="post">
       <h1>Mystery Word</h1>
       <br>
-      <br>
       <h4>Choose Difficulty:</h4>
-      <br>
-      <select name="difficulty">
-        <option value="easy">Easy</option>
-        <option value="normal">Normal</option>
-        <option value="hard">Hard</option>
-      </select>
-      <button type="submit" name="button">Start</button>
-    </form>
-
+      <form class="difficulty" action="/easy" method="post">
+        <button type="submit" name="easy">Easy</button>
+      </form>
+      <form class="difficulty" action="/normal" method="post">
+        <button type="submit" name="easy">Normal</button>
+      </form>
+      <form class="difficulty" action="/hard" method="post">
+        <button type="submit" name="easy">Hard</button>
+      </form>
   </body>
 </html>
