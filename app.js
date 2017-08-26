@@ -22,8 +22,8 @@ const hardWords = words.filter(function(element) {
   };
 });
 
-let winner = ["Chris", "Chris"]
-//let winners = [{name: "Chris", img: "" }];
+let winners = [];
+let pics = [];
 
 app.use(express.static(__dirname + '/public'));
 app.engine('mustache', mustache());
@@ -65,16 +65,16 @@ app.get('/newgame', function(req, res){
     letters = [];
     wordArray = [];
     for (let i = 0; i < wordLetters.length; i++){
-      wordArray.push("");
+      wordArray.push({letter: "", color: "black"});
     }
-    res.render('game', {guesses, letters, wordArray, gameStart});
+    res.render('game', {guesses, letters, wordArray: wordArray, gameStart});
   } else {
     res.redirect('/')
   }
 });
 
 app.get('/winners', function(req, res){
-  res.render('winners', {winners});
+  res.render('winners', {winners, pics});
 });
 
 app.post('/easy', function(req, res){
@@ -97,6 +97,7 @@ app.post('/hard', function(req, res){
 
 app.post('/win', function(req, res){
   winners.push(req.body.name);
+  pics.push(req.body.pic);
   res.redirect('/winners');
 })
 
@@ -106,31 +107,30 @@ app.post('/newgame', function(req, res){
     newMatch = null;
     if (!letterGuess){
       authError = "Please enter a letter."
-      res.render('game', {guesses, letters, wordArray, authError});
+      res.render('game', {guesses, letters, wordArray: wordArray, authError});
     } else if (req.checkBody('letter', 'Invalid letter').isAlpha().validationErrors[0]) {
       authError = "Invalid Entry. Please enter a letter."
-      res.render('game', {guesses, letters, wordArray, authError});
+      res.render('game', {guesses, letters, wordArray: wordArray, authError});
     } else {
       if (letters.includes(letterGuess)){
         authError = "Letter already guessed. Please try another!"
-        res.render('game', {guesses, letters, wordArray, authError});
+        res.render('game', {guesses, letters, wordArray: wordArray, authError});
       } else {
         match = false;
         checkLetter();
-        console.log(wordLetters);
-        console.log(wordArray);
         letters.push(letterGuess);
         if (points === req.session.word.length){
           winner = "Winner, Winner!!";
           newGame = true;
-          res.render('game', {winner, guesses, letters, wordArray, newGame});
+          res.render('game', {winner, guesses, letters, wordArray: wordArray, newGame});
         } else if (guesses === 0){
           authError = "You Lose!"
           newGame = true;
           missedLetters();
-          res.render('game', {guesses, letters, wordArray, authError, newGame});
+          console.log(wordArray);
+          res.render('game', {guesses, letters, wordArray: wordArray, authError, newGame});
         } else {
-          res.render('game', {guesses, letters, wordArray, authError, newMatch});
+          res.render('game', {guesses, letters, wordArray: wordArray, authError, newMatch});
         }}}});
 
 app.post('/new', function(req, res){
@@ -145,19 +145,20 @@ function checkLetter(){
   for (let i = 0; i < wordLetters.length; i++){
     if (letterGuess === wordLetters[i]){
       match = true;
-      points+=1;
-      wordArray[i] = wordLetters[i];
+      points++;
+      wordArray[i].letter = wordLetters[i];
       newMatch = true;}
     }
   if (match === false){
-    guesses-=1;
+    guesses--;
     authError = "No match here! Guess again."
 }};
 
 function missedLetters(){
   for (let i = 0; i < wordLetters.length; i++){
-    if (wordArray[i] === ""){
-      wordArray[i] = wordLetters[i];
+    if (wordArray[i].letter === ""){
+      wordArray[i].letter = wordLetters[i];
+      wordArray[i].color= "#FDCBD1";
 }}};
 
 app.listen(3000, function(){

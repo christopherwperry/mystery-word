@@ -11,6 +11,9 @@
       {{#winners}}
       <div class="winners-list">
         {{.}}
+        {{#pics}}
+        <img src="{{.}}" alt="No-Pic">
+        {{/pics}}
       </div>
       {{/winners}}
       <form class="new-game" action="/new" method="post">
