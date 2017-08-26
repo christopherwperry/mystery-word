@@ -127,7 +127,6 @@ app.post('/newgame', function(req, res){
           authError = "You Lose!"
           newGame = true;
           missedLetters();
-          console.log(wordArray);
           res.render('game', {guesses, letters, wordArray: wordArray, authError, newGame});
         } else {
           res.render('game', {guesses, letters, wordArray: wordArray, authError, newMatch});
@@ -158,7 +157,7 @@ function missedLetters(){
   for (let i = 0; i < wordLetters.length; i++){
     if (wordArray[i].letter === ""){
       wordArray[i].letter = wordLetters[i];
-      wordArray[i].color= "#FDCBD1";
+      wordArray[i].color= "#B72828";
 }}};
 
 app.listen(3000, function(){
