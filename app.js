@@ -5,6 +5,9 @@ const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const app = express();
 const fs = require('fs');
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
+const mongoURL = 'mongodb://localhost:27017/newdb';
 const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 const easyWords = words.filter(function(element) {
   if (element.length < 7 && element.length > 3){
@@ -22,7 +25,7 @@ const hardWords = words.filter(function(element) {
   };
 });
 
-let winners = [];
+//let winners = [];
 let pics = [];
 
 app.use(express.static(__dirname + '/public'));
@@ -37,6 +40,15 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
+
+app.use('/winners', function (req, res) {
+  MongoClient.connect(mongoURL, function (err, db) {
+    const winners = db.collection('winners');
+    winners.find({}).toArray(function (err, users) {
+      res.render("winners", {winners: users})
+    })
+  })
+})
 
 app.get('/', function(req, res){
   res.render('index')
@@ -67,14 +79,12 @@ app.get('/newgame', function(req, res){
     for (let i = 0; i < wordLetters.length; i++){
       wordArray.push({letter: "", color: "black"});
     }
+    console.log(wordArray);
+    console.log(wordLetters);
     res.render('game', {guesses, letters, wordArray: wordArray, gameStart});
   } else {
     res.redirect('/')
   }
-});
-
-app.get('/winners', function(req, res){
-  res.render('winners', {winners, pics});
 });
 
 app.post('/easy', function(req, res){
@@ -96,9 +106,11 @@ app.post('/hard', function(req, res){
 });
 
 app.post('/win', function(req, res){
-  winners.push(req.body.name);
-  pics.push(req.body.pic);
-  res.redirect('/winners');
+  MongoClient.connect(mongoURL, function (err, db) {
+    const winners = db.collection('winners');
+    winners.insert({"name": req.body.name, "picture": req.body.pic});
+    res.redirect('/winners');
+})
 })
 
 app.post('/newgame', function(req, res){

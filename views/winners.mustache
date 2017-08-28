@@ -10,10 +10,8 @@
     <h1>Game Winners</h1>
       {{#winners}}
       <div class="winners-list">
-        {{.}}
-        {{#pics}}
-        <img src="{{.}}" alt="No-Pic">
-        {{/pics}}
+        {{name}}
+        <img src="{{picture}}" alt="No-Pic">
       </div>
       {{/winners}}
       <form class="new-game" action="/new" method="post">
