@@ -25,9 +25,6 @@ const hardWords = words.filter(function(element) {
   };
 });
 
-//let winners = [];
-let pics = [];
-
 app.use(express.static(__dirname + '/public'));
 app.engine('mustache', mustache());
 app.set('views', ['./views']);
@@ -110,7 +107,7 @@ app.post('/win', function(req, res){
     const winners = db.collection('winners');
     winners.insert({"name": req.body.name, "picture": req.body.pic});
     res.redirect('/winners');
-})
+  })
 })
 
 app.post('/newgame', function(req, res){
@@ -169,7 +166,7 @@ function missedLetters(){
   for (let i = 0; i < wordLetters.length; i++){
     if (wordArray[i].letter === ""){
       wordArray[i].letter = wordLetters[i];
-      wordArray[i].color= "#B72828";
+      wordArray[i].color= "red";
 }}};
 
 app.listen(3000, function(){
