@@ -8,7 +8,7 @@ const fs = require('fs');
 const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
 const mongoURL = 'mongodb://localhost:27017/newdb';
-const words = fs.readFileSync("words", "utf-8").toLowerCase().split("\n");
+const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
 const easyWords = words.filter(function(element) {
   if (element.length < 7 && element.length > 3){
     return (element);

@@ -41,3 +41,13 @@ form {
 .pic {
   text-align: right;
 }
+
+.difficulty-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.difficulty {
+  margin: 5px;
+}
