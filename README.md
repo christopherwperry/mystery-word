@@ -2,9 +2,6 @@ You will implement the game Mystery Word as a web application. In your game, you
 
 When a user that is not in a current game arrives at your root page, your app must select a word at random from the list of words in the file /usr/share/dict/words. This file exists on your computer already. You will have to read it with Node. The following line will read it and split it into words:
 
-const words = fs.readFileSync("/usr/share/dict/words", "utf-8").toLowerCase().split("\n");
-Store the word the user is trying to guess in a session.
-
 On the page, show the number of letters in the word like so:
 
 _ _ _ _ _ _ _
