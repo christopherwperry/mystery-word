@@ -1,6 +1,6 @@
 const express = require('express');
 const mustache = require('mustache-express');
-const session = require('express-session')
+const cookieSession = require('cookie-session')
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const app = express();
@@ -33,10 +33,12 @@ app.set('view engine', 'mustache');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(expressValidator());
-app.use(session({
-  secret: 'mystery men',
-  resave: false,
-  saveUninitialized: true
+app.use(cookieSession({
+  name: 'session',
+  keys: [ 'key1', 'key2'],
+
+  // Cookie Options
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }));
 
 app.use('/winners', function (req, res) {
